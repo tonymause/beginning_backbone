@@ -1,0 +1,28 @@
+{
+  "name": "beginning_backbone",
+  "version": "1.0.0",
+  "description": "beginning backbone",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "body-parser": "1.15.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonymause/beginning_backbone.git"
+  },
+  "keywords": [
+    "backbone"
+  ],
+  "author": "wei bin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tonymause/beginning_backbone/issues"
+  },
+  "homepage": "https://github.com/tonymause/beginning_backbone#readme"
+}
