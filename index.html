@@ -10,6 +10,8 @@
 <script src="js/external/underscore.js"></script>
 <script src="js/external/backbone.js"></script>
 
+
+<div id="myLibraryViewSection"></div>
 <script>
 Book = Backbone.Model.extend({
     // urlRoot: 'http://localhost:8080/books/',
@@ -54,8 +56,21 @@ Book = Backbone.Model.extend({
 
 Library = Backbone.Collection.extend({
     model:Book,
+    url:'http://localhost:8080/books',
     initialize: function(){
         console.log('Creating a new Library');
+    }
+});
+
+//Define the Library View
+LibraryView = Backbone.View.extend({
+    initialize: function(){
+        this.render();
+        console.log('View created');
+    },
+    render:function(){
+        this.$el.html('Book Name: ' + this.model.get('title'));
+        return this;
     }
 });
 
@@ -91,22 +106,60 @@ Library = Backbone.Collection.extend({
 //     wait: true
 // });
 
-bookOne = new Book({title:'Beginning Backbone', author: 'James Sugrue', year:2001});
-bookTwo = new Book({title: 'Pro Javascript Design Pattern', author: 'Dus', year:2000});
-thisLibrary = new Library();
-thisLibrary.add(bookOne);
-thisLibrary.add(bookTwo);
+book1 = new Book({title:'Beginning Backbone', author: 'James Sugrue', year:2001});
+book2 = new Book({title: 'Pro Javascript Design Pattern', author: 'Dus', year:2000});
+book3 = new Book({title: 'Pro Javascript Design Pattern 2', author: 'Dus', year:2000});
+thisLibrary = new Library([book1,book2,book3]);
 
 thisLibrary.forEach(function(model){
     console.log('Book is called '+ model.get('title'));
-});
-thisLibrary.sortBy(function(model){
+})
+var sortedByYear = thisLibrary.sortBy(function(model){
     return model.get('year');
 });
 
-thisLibrary.forEach(function(model){
+sortedByYear.forEach(function(model){
     console.log('Book is called '+ model.get('title'));
 });
+
+
+var authors = thisLibrary.pluck('author');
+authors.forEach(function(authorName){
+    console.log(authorName);
+});
+
+var results = thisLibrary.where({author:'Dus'});
+console.log('Found: '+results.length+' matches');
+var result = thisLibrary.findWhere({author:'Dus'});
+console.log('Result: '+result.get('author'));
+
+var byPublished = thisLibrary.groupBy('year');
+thisLibrary.forEach(function(model){
+        console.log('Book is called ' + model.get('title'));
+});
+
+
+
+var myOnlineLibrary = new Library();
+myOnlineLibrary.fetch({
+    success:function(e){
+        console.log('get data');
+    },
+    error:function(e){
+        console.log('Wrong');
+    },
+    wait:true
+});
+
+
+/// VIEW
+var thisBook = new Book({title: 'Beginning Backbone', author: 'James Sugrue'});
+// create a instance of view
+var myView = new LibraryView({
+    model:thisBook,
+    el:'#myLibraryViewSection'
+});
+console.log(myView.el);
 </script>
 </body>
 </html>
