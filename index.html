@@ -91,15 +91,22 @@ Library = Backbone.Collection.extend({
 //     wait: true
 // });
 
-bookOne = new Book({title:'Beginning Backbone', author: 'James Sugrue'});
-bookTwo = new Book({title: 'Pro Javascript Design Pattern', author: 'Dus'});
-thisLibrary = new Library([bookOne]);
-console.log('Library contains '+thisLibrary.length+' books');
+bookOne = new Book({title:'Beginning Backbone', author: 'James Sugrue', year:2001});
+bookTwo = new Book({title: 'Pro Javascript Design Pattern', author: 'Dus', year:2000});
+thisLibrary = new Library();
+thisLibrary.add(bookOne);
 thisLibrary.add(bookTwo);
-console.log('Library contains '+thisLibrary.length+' books');
-thisLibrary.set([bookTwo]);
-console.log('Library contains '+thisLibrary.length+' books');
 
+thisLibrary.forEach(function(model){
+    console.log('Book is called '+ model.get('title'));
+});
+thisLibrary.sortBy(function(model){
+    return model.get('year');
+});
+
+thisLibrary.forEach(function(model){
+    console.log('Book is called '+ model.get('title'));
+});
 </script>
 </body>
 </html>
