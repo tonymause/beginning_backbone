@@ -5,7 +5,8 @@
   "main": "server.js",
   "dependencies": {
     "express": "^4.13.4",
-    "body-parser": "1.15.0"
+    "body-parser": "1.15.0",
+    "twit": "2.2.2"
   },
   "devDependencies": {},
   "scripts": {

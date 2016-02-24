@@ -1,42 +1,35 @@
-/**
-* A simple API hosted under localhost:8080/books
-*/
 var express = require('express');
 var bodyParser = require('body-parser');
+var Twit = require('twit')
+
 var app = express();
-var bookId = 100;
 
-function findBook(id){
-   for(var i =0; i<books.length; i++){
-       if(books[i].id=== id){
-           return books[i];
-       }
-   }
-   return null;
-}
 
-function removeBook(id){
-   var bookIndex = 0;
-   for(var i=0; i<books.length; i++){
-       if(books[i].id=== id){
-           bookIndex = i;
-       }
-   }
-   books.splice(bookIndex, 1);
+var client = null;
+
+function connectToTwitter(){
+   client = new Twit({
+        consumer_key:         'oArpObGweDRhJN2Ys2RySEmGu',
+        consumer_secret:      '7R9SvKExCItMzTOC9UZNqUTpqIK5S0Trp3ygATCHNdWe2L4Aox',
+        access_token:         '52739523-GX5Xp45jsvHpg7Cci2An0mVr2pKlyDCM0bl9LxP9L',
+        access_token_secret:  'O7hZITOq8EmTJu82ugItWQ7fpX5rKpjWzOb5jOyItmw5K'
+});
 }
+//get the app to connect to twitter.
+connectToTwitter();
 
 //additional setup to allow CORS requests
 var allowCrossDomain = function(req, response, next) {
-   response.header('Access-Control-Allow-Origin', "http://localhost");
-   response.header('Access-Control-Allow-Methods', 'OPTIONS, GET,PUT,POST,DELETE');
-   response.header('Access-Control-Allow-Headers', 'Content-Type');
+    response.header('Access-Control-Allow-Origin', "http://localhost");
+    response.header('Access-Control-Allow-Methods', 'OPTIONS, GET,PUT,POST,DELETE');
+    response.header('Access-Control-Allow-Headers', 'Content-Type');
 
-   if ('OPTIONS' == req.method) {
-     response.sendStatus(200);
-   }
-   else {
-     next();
-   }
+    if ('OPTIONS' == req.method) {
+      response.sendStatus(200);
+    }
+    else {
+      next();
+    }
 };
 
 app.use(allowCrossDomain);
@@ -44,95 +37,20 @@ app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-var books = [
-{id: 98, author: 'Stephen King', title: 'The Shining', year: 1977},
-{id: 99, author: 'George Orwell', title: 1949}];
 /**
-* HTTP GET /books
-* Should return a list of books
-*/
-app.get('/books', function (request, response) {
-    
-   response.header('Access-Control-Allow-Origin', '*');
-   console.log('In GET function ');
-   response.json(books);
-
-});
-/**
-* HTTP GET /books/:id
-* id is the unique identifier of the book you want to retrieve
-* Should return the task with the specified id, or else 404
-*/
-app.get('/books/:id', function (request, response) {
+ * Returns the twitter timeline for the current user
+ **/
+app.get('/timeline', function (request, response) {
   response.header('Access-Control-Allow-Origin', '*');
-  console.log('Getting a  book with id ' + request.params.id);
-  var book = findBook(parseInt(request.params.id,10));
-  if(book === null){
-       response.sendStatus(404);
-  }
-  else{
-       response.json(book);
-  }
-    
+  client.get('statuses/home_timeline', { },  function (err, reply) {
+    if(err){
+      response.sendStatus(404);
+    }
+    if(reply){
+      response.json(reply);
+    }
+  });
 });
-/**
-* HTTP POST /books/
-* The body of this request contains the book you are creating.
-* Returns 200 on success
-*/
-app.post('/books/', function (request, response) {
-   response.header('Access-Control-Allow-Origin', '*');
-
-   var book = request.body;
-   console.log('Saving book with the following structure ' + JSON.stringify(book));
-   book.id= bookId++;
-   books.push(book);
-   response.send(book);
-});
-/**
-* HTTP PUT /books/
-* The id is the unique identifier of the book you wish to update.
-* Returns 404 if the book with this id doesn't exist.
-*/
-app.put('/books/:id', function (request, response) {
-  response.header('Access-Control-Allow-Origin', '*');
-  var book = request.body;
-  console.log('Updating  Book ' + JSON.stringify(book));
-  var currentBook = findBook(parseInt(request.params.id,10));
-  if(currentBook === null){
-    console.log('Not find the book');
-    response.sendStatus(404);
-  }
-  else{
-      //save the book locally
-      currentBook.title = book.title;
-      currentBook.year = book.year;
-      currentBook.author = book.author;
-      console.log(JSON.stringify(book));
-      response.send(book);
-  }
-});
-/**
-* HTTP DELETE /books/
-* The id is the unique identifier of the book you wish to delete.
-* Returns 404 if the book with this id doesn't exist.
-*/
-app.delete('/books/:id', function (request, response) {
-  response.header('Access-Control-Allow-Origin', '*');
-  console.log('calling delete');
-  var book = findBook(parseInt(request.params.id,10));
-  if(book === null){
-    console.log('Could not find book');
-    response.sendStatus(404);
-  }
-  else{
-    console.log('Deleting ' + request.params.id);
-    removeBook(parseInt(request.params.id, 10));
-    response.sendStatus(200);
-  }
-});
-
-
 
 //start up the app on port 8080
 app.listen(8080);
