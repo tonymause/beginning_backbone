@@ -10,3 +10,10 @@ com.apress.model.Tweet = Backbone.Model.extend({
 		return model;
 	}
 });
+
+com.apress.model.Profile = Backbone.Model.extend({
+	urlRoot: 'http://localhost:8080/profile',
+	parse: function(model){
+		return model;
+	}
+})

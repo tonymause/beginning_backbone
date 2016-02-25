@@ -1,4 +1,4 @@
-var com = com || {};
+ var com = com || {};
 com.apress = com.apress || {};
 com.apress.view = com.apress.view || {};
 

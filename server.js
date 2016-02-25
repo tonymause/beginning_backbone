@@ -51,6 +51,20 @@ app.get('/timeline', function (request, response) {
     }
   });
 });
+/**
+ * Get the account setting for 
+ **/
+ app.get('/profile', function(request, response){
+  response.header('Access-Control-Allow-Origin', '*');
+  client.get('users/show', {screen_name: 'tonymause'}, function(err, reply){
+    if (err) {
+      console.log('error: '+err);
+    }
+    if (reply) {
+      response.json(reply);
+    }
+  });
+ });
 
 //start up the app on port 8080
 app.listen(8080);
