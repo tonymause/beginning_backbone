@@ -44,9 +44,11 @@ app.get('/timeline', function (request, response) {
   response.header('Access-Control-Allow-Origin', '*');
   client.get('statuses/home_timeline', { },  function (err, reply) {
     if(err){
+      console.log('timeline err');
       response.sendStatus(404);
     }
     if(reply){
+      console.log('timeline reply');
       response.json(reply);
     }
   });
@@ -54,17 +56,44 @@ app.get('/timeline', function (request, response) {
 /**
  * Get the account setting for 
  **/
- app.get('/profile', function(request, response){
+ app.get('/profile/:id', function(request, response){
   response.header('Access-Control-Allow-Origin', '*');
-  client.get('users/show', {screen_name: 'tonymause'}, function(err, reply){
+  client.get('users/show', {screen_name: request.params.id}, function(err, reply){
     if (err) {
       console.log('error: '+err);
+      response.sendStatus(404);
     }
     if (reply) {
+      // console.log('Reply: ' + reply);
       response.json(reply);
     }
   });
  });
+
+/**
+ * Runs a search given a query
+ **/
+app.get('/search/:query', function (request, response) {
+     
+    response.header('Access-Control-Allow-Origin', '*');
+    //search term is
+    var searchTerm = request.params.query;
+    console.log('searchTerm: '+ searchTerm);
+    client.get('search/tweets', { q: searchTerm, count: 100 }, function(err, reply) {
+
+      if(err){
+        console.log('Error: ' + err);
+        response.send(404);
+
+      }
+      if(reply){
+        console.log('search Reply: ' + reply);
+        response.json(reply);
+      }
+
+  });
+
+});
 
 //start up the app on port 8080
 app.listen(8080);

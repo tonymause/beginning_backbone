@@ -10,6 +10,10 @@ com.apress.view.TimelineView = Backbone.View.extend({
     
     timeline: null,
 
+    events: {
+        'click .profile': 'showDialog'
+    },
+
     initialize: function(options){
     	var self = this;
     	//create a collection for this view to render
@@ -33,4 +37,11 @@ com.apress.view.TimelineView = Backbone.View.extend({
     	return self;
     },
 
+    showDialog: function(options){
+        var self =this,
+        $target = $(options.currentTarget),
+        username = $target.data('user');
+        console.log('test');
+        var profileView = new com.apress.view.ProfilePopupView({user: username});
+    },
 });

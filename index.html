@@ -20,6 +20,14 @@
         <div class="span4">
             <div id="profile" class="profile-view">
             </div>
+            <div id="search" class="search-view">
+              <form>
+                <div class="input-control text">
+                  <input type="text" id="searchbox" autofocus="" placeholder="I'm looking for..">
+                </div>
+                <button class="bg-color-blue" id="searchbutton">Search</button>
+              </form>
+            </div>
         </div>
     </div>
 </div>
@@ -63,6 +71,7 @@
 <script src="js/external/backbone.js"></script>
 <script src="js/external/handlebars-v3.0.1.js"></script>
 <script src="js/external/moment.js"></script>
+<script src="js/external/dialog.js"></script>
 <!-- Model -->
 <script src="js/app/model/Tweet.js"></script>
 <!-- Collections -->
@@ -70,8 +79,11 @@
 <!-- View -->
 <script src="js/app/view/TimelineView.js"></script>
 <script src="js/app/view/ProfileView.js"></script>
+<script src="js/app/view/ProfilePopupView.js"></script>
+<script src="js/app/view/SearchView.js"></script>
+<script src="js/app/view/ResultsView.js"></script>
 <!-- Router -->
-<!-- <script src="js/app/router/AppRouter.js"></script> -->
+<script src="js/app/router/AppRouter.js"></script>
 <!-- Util --> 
 <script src="js/app/util/helpers.js"></script>
 

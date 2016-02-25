@@ -11,7 +11,7 @@ com.apress.view.ProfileView = Backbone.View.extend({
     initialize:  function(options){
         var self = this;
         //create a collection for this view to render
-        self.model = new com.apress.model.Profile();
+        self.model = new com.apress.model.Profile({id: options.user});
 
         //force the fetch to fire a reset event
         self.model.fetch({});

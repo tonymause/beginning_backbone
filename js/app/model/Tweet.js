@@ -17,3 +17,17 @@ com.apress.model.Profile = Backbone.Model.extend({
 		return model;
 	}
 })
+
+com.apress.model.Search = Backbone.Model.extend({
+
+	url 	: 'http://localhost:8080/search',
+	rootUrl : 'http://localhost:8080/search',
+
+    sync: function(method, model, options){
+        if(this.get('query')){
+            this.url = this.rootUrl + '/' + this.get('query');
+            console.log(this.url);
+        }
+        Backbone.sync.call(this, method, model, options);
+    },
+});
